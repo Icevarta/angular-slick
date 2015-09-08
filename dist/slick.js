@@ -21,22 +21,28 @@ angular.module('slick', []).directive('slick', [
         cssEase: '@',
         customPaging: '&',
         dots: '@',
+        dotsClass: '@',
         draggable: '@',
         easing: '@',
+        edgeFriction: '@',
         fade: '@',
         focusOnSelect: '@',
         infinite: '@',
         initialSlide: '@',
         lazyLoad: '@',
-        onBeforeChange: '&',
-        onAfterChange: '&',
-        onInit: '&',
-        onReInit: '&',
-        onSetPosition: '&',
+        mobileFirst: '@',
+        onBeforeChange: '=',
+        onAfterChange: '=',
+        onInit: '=',
+        onReInit: '=',
+        onSetPosition: '=',
         pauseOnHover: '@',
         pauseOnDotsHover: '@',
         responsive: '=',
+        respondTo: '@',
         rtl: '@',
+        rows: '@',
+        slidesPerRow: '@',
         slide: '@',
         slidesToShow: '@',
         slidesToScroll: '@',
@@ -48,8 +54,11 @@ angular.module('slick', []).directive('slick', [
         useCSS: '@',
         variableWidth: '@',
         vertical: '@',
+        verticalSwiping: '@',
+        waitForAnimate: '@',
         prevArrow: '@',
-        nextArrow: '@'
+        nextArrow: '@',
+        zIndex: '@'
       },
       link: function (scope, element, attrs) {
         var destroySlick, initializeSlick, isInitialized;
@@ -89,19 +98,23 @@ angular.module('slick', []).directive('slick', [
               cssEase: scope.cssEase || 'ease',
               customPaging: attrs.customPaging ? customPaging : void 0,
               dots: scope.dots === 'true',
+              dotsClass: scope.dotsClass || 'slick-dots',
               draggable: scope.draggable !== 'false',
               easing: scope.easing || 'linear',
+              edgeFriction: scope.edgeFriction || 0.15,
               fade: scope.fade === 'true',
               focusOnSelect: scope.focusOnSelect === 'true',
               infinite: scope.infinite !== 'false',
               initialSlide: scope.initialSlide || 0,
               lazyLoad: scope.lazyLoad || 'ondemand',
-              beforeChange: attrs.onBeforeChange ? scope.onBeforeChange : void 0,
-              onReInit: attrs.onReInit ? scope.onReInit : void 0,
-              onSetPosition: attrs.onSetPosition ? scope.onSetPosition : void 0,
+              mobileFirst: scope.mobileFirst === 'true',
               pauseOnHover: scope.pauseOnHover !== 'false',
+              pauseOnDotsHover: scope.pauseOnDotsHover === 'true',
               responsive: scope.responsive || void 0,
               rtl: scope.rtl === 'true',
+              respondTo: scope.respondTo != null ? scope.respondTo : 'window',
+              rows: scope.rows != null ? parseInt(scope.rows, 10) : 1,
+              slidesPerRow: scope.slidesPerRow != null ? parseInt(scope.slidesPerRow, 10) : 1,
               slide: scope.slide || 'div',
               slidesToShow: scope.slidesToShow != null ? parseInt(scope.slidesToShow, 10) : 1,
               slidesToScroll: scope.slidesToScroll != null ? parseInt(scope.slidesToScroll, 10) : 1,
@@ -113,26 +126,64 @@ angular.module('slick', []).directive('slick', [
               useCSS: scope.useCSS !== 'false',
               variableWidth: scope.variableWidth === 'true',
               vertical: scope.vertical === 'true',
+              verticalSwiping: scope.verticalSwiping != null === 'true',
+              waitForAnimate: scope.waitForAnimate != null !== 'true',
+              zIndex: scope.zIndex != null ? parseInt(scope.zIndex, 10) : 1000,
               prevArrow: scope.prevArrow ? $(scope.prevArrow) : void 0,
               nextArrow: scope.nextArrow ? $(scope.nextArrow) : void 0
             });
-            slider.on('init', function (sl) {
+            slider.on('init', function (event, slick) {
               if (attrs.onInit) {
                 scope.onInit();
               }
               if (currentIndex != null) {
-                return sl.slideHandler(currentIndex);
+                return slick.slideHandler(currentIndex);
               }
             });
-            slider.on('afterChange', function (event, slick, currentSlide, nextSlide) {
+            slider.on('reInit', function (event, slick) {
+              if (attrs.onReInit) {
+                return scope.onReInit();
+              }
+            });
+            slider.on('setPosition', function (event, slick) {
+              if (attrs.onSetPosition) {
+                return scope.onSetPosition();
+              }
+            });
+            slider.on('swipe', function (event, slick, direction) {
+              if (attrs.onSwipe) {
+                return scope.onSwipe(direction);
+              }
+            });
+            slider.on('afterChange', function (event, slick, currentSlide) {
               if (scope.onAfterChange) {
-                scope.onAfterChange();
+                scope.onAfterChange(currentSlide);
               }
               if (currentIndex != null) {
                 return scope.$apply(function () {
                   currentIndex = currentSlide;
                   return scope.currentIndex = currentSlide;
                 });
+              }
+            });
+            slider.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+              if (attrs.onBeforeChange) {
+                return scope.onBeforeChange(currentSlide, nextSlide);
+              }
+            });
+            slider.on('breakpoint', function (event, slick) {
+              if (attrs.onBreakpoint) {
+                return scope.onBreakpoint();
+              }
+            });
+            slider.on('destroy', function (event, slick) {
+              if (attrs.onDestroy) {
+                return scope.onDestroy();
+              }
+            });
+            slider.on('edge', function (event, slick, direction) {
+              if (attrs.onEdge) {
+                return scope.onEdge(direction);
               }
             });
             return scope.$watch('currentIndex', function (newVal, oldVal) {
