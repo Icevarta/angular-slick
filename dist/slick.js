@@ -84,60 +84,6 @@ angular.module('slick', []).directive('slick', [
                 index: index
               });
             };
-            slider.on('init', function (event, slick) {
-                if (attrs.onInit) {
-                    scope.onInit();
-                }
-                if (currentIndex != null) {
-                    return slick.slideHandler(currentIndex);
-                }
-            });
-            slider.on('reInit', function (event, slick) {
-                if (attrs.onReInit) {
-                    return scope.onReInit();
-                }
-            });
-            slider.on('setPosition', function (event, slick) {
-                if (attrs.onSetPosition) {
-                    return scope.onSetPosition();
-                }
-            });
-            slider.on('swipe', function (event, slick, direction) {
-                if (attrs.onSwipe) {
-                    return scope.onSwipe(direction);
-                }
-            });
-            slider.on('afterChange', function (event, slick, currentSlide) {
-                if (scope.onAfterChange) {
-                    scope.onAfterChange(currentSlide);
-                }
-                if (currentIndex != null) {
-                    return scope.$apply(function () {
-                      currentIndex = currentSlide;
-                      return scope.currentIndex = currentSlide;
-                    });
-                }
-            });
-            slider.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
-                if (attrs.onBeforeChange) {
-                    return scope.onBeforeChange(currentSlide, nextSlide);
-                }
-            });
-            slider.on('breakpoint', function (event, slick) {
-                if (attrs.onBreakpoint) {
-                    return scope.onBreakpoint();
-                }
-            });
-            slider.on('destroy', function (event, slick) {
-                if (attrs.onDestroy) {
-                    return scope.onDestroy();
-                }
-            });
-            slider.on('edge', function (event, slick, direction) {
-                if (attrs.onEdge) {
-                    return scope.onEdge(direction);
-                }
-            });
             slider.slick({
               accessibility: scope.accessibility !== 'false',
               adaptiveHeight: scope.adaptiveHeight === 'true',
@@ -185,6 +131,60 @@ angular.module('slick', []).directive('slick', [
               zIndex: scope.zIndex != null ? parseInt(scope.zIndex, 10) : 1000,
               prevArrow: scope.prevArrow ? $(scope.prevArrow) : void 0,
               nextArrow: scope.nextArrow ? $(scope.nextArrow) : void 0
+            });
+            slider.on('init', function (event, slick) {
+              if (attrs.onInit) {
+                scope.onInit();
+              }
+              if (currentIndex != null) {
+                return slick.slideHandler(currentIndex);
+              }
+            });
+            slider.on('reInit', function (event, slick) {
+              if (attrs.onReInit) {
+                return scope.onReInit();
+              }
+            });
+            slider.on('setPosition', function (event, slick) {
+              if (attrs.onSetPosition) {
+                return scope.onSetPosition();
+              }
+            });
+            slider.on('swipe', function (event, slick, direction) {
+              if (attrs.onSwipe) {
+                return scope.onSwipe(direction);
+              }
+            });
+            slider.on('afterChange', function (event, slick, currentSlide) {
+              if (scope.onAfterChange) {
+                scope.onAfterChange(currentSlide);
+              }
+              if (currentIndex != null) {
+                return scope.$apply(function () {
+                  currentIndex = currentSlide;
+                  return scope.currentIndex = currentSlide;
+                });
+              }
+            });
+            slider.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+              if (attrs.onBeforeChange) {
+                return scope.onBeforeChange(currentSlide, nextSlide);
+              }
+            });
+            slider.on('breakpoint', function (event, slick) {
+              if (attrs.onBreakpoint) {
+                return scope.onBreakpoint();
+              }
+            });
+            slider.on('destroy', function (event, slick) {
+              if (attrs.onDestroy) {
+                return scope.onDestroy();
+              }
+            });
+            slider.on('edge', function (event, slick, direction) {
+              if (attrs.onEdge) {
+                return scope.onEdge(direction);
+              }
             });
             return scope.$watch('currentIndex', function (newVal, oldVal) {
               if (currentIndex != null && newVal != null && newVal !== currentIndex) {
