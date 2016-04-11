@@ -105,7 +105,7 @@ angular.module('slick', []).directive('slick', [
               fade: scope.fade === 'true',
               focusOnSelect: scope.focusOnSelect === 'true',
               infinite: scope.infinite !== 'false',
-              initialSlide: scope.initialSlide || 0,
+              initialSlide: parseInt(scope.initialSlide) || 0,
               lazyLoad: scope.lazyLoad || 'ondemand',
               mobileFirst: scope.mobileFirst === 'true',
               pauseOnHover: scope.pauseOnHover !== 'false',
