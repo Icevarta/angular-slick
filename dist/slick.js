@@ -129,8 +129,8 @@ angular.module('slick', []).directive('slick', [
               verticalSwiping: scope.verticalSwiping != null === 'true',
               waitForAnimate: scope.waitForAnimate != null !== 'true',
               zIndex: scope.zIndex != null ? parseInt(scope.zIndex, 10) : 1000,
-              prevArrow: scope.prevArrow ? $(scope.prevArrow) : void 0,
-              nextArrow: scope.nextArrow ? $(scope.nextArrow) : void 0
+              prevArrow: scope.prevArrow ? scope.prevArrow : void 0,
+              nextArrow: scope.nextArrow ? scope.nextArrow : void 0
             });
             slider.on('init', function (event, slick) {
               if (attrs.onInit) {

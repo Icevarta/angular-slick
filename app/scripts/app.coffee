@@ -121,8 +121,8 @@ angular.module('slick', [])
           verticalSwiping: scope.verticalSwiping? is "true"
           waitForAnimate: scope.waitForAnimate? isnt "true"
           zIndex: if scope.zIndex? then parseInt(scope.zIndex, 10) else 1000
-          prevArrow: if scope.prevArrow then $(scope.prevArrow) else undefined
-          nextArrow: if scope.nextArrow then $(scope.nextArrow) else undefined
+          prevArrow: if scope.prevArrow then (scope.prevArrow) else undefined
+          nextArrow: if scope.nextArrow then (scope.nextArrow) else undefined
 
 
         slider.on 'init', (event, slick) ->
